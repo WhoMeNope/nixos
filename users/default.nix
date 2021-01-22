@@ -41,6 +41,8 @@
 
         command-not-found.enable = true;
 
+        i3status-rust = import ./martin/i3status-rust.nix { };
+
         zsh = import ./martin/zsh.nix { inherit pkgs; };
         direnv = {
           enable = true;
