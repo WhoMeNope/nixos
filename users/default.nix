@@ -27,10 +27,6 @@
   home-manager.users = {
     martin = { pkgs, ... }:
     {
-      imports = [
-        ./powerline-go-zsh.nix
-      ];
-
       xresources.properties = import ./martin/xresources.nix;
 
       programs = {
@@ -53,7 +49,7 @@
           enableZshIntegration = true;
           defaultCommand = "fd --type f --hidden --follow --exclude .git";
         };
-        powerline-go-zsh = {
+        powerline-go = {
           enable = true;
           settings = {
             numeric-exit-codes = true;
