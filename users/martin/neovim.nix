@@ -64,6 +64,7 @@
        vim-terraform
        vim-racket
        pkgs.parinfer-rust
+       agda-vim
      ];
      opt = [
        coc-pairs
