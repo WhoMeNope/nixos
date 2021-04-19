@@ -65,6 +65,7 @@
        vim-racket
        pkgs.parinfer-rust
        agda-vim
+       vimtex
      ];
      opt = [
        coc-pairs

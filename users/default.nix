@@ -108,6 +108,7 @@
         paper2remarkable
 
         slack
+        teams
 
         gimp
         inkscape
