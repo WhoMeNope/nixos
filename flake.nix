@@ -47,7 +47,6 @@
         ./extras/intel.nix
         ./extras/thinkpad.nix
         ./extras/wacom.nix
-        ./extras/docker.nix
 
         home-manager.nixosModules.home-manager
         ./users
