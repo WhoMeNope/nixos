@@ -109,6 +109,7 @@
 
         slack
         teams
+        zoom-us
 
         gimp
         inkscape
