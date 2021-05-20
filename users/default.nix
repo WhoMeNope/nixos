@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   nix.trustedUsers = [ "root" "martin" ];
@@ -9,12 +9,11 @@
       extraGroups = [
         "wheel"
         "networkmanager"
-        "docker"
         "audio"
         "jackaudio"
         "video"
-        "vboxusers"
-      ];
+      ]
+      ++ (if (config.virtualisation.docker.enable == true) then ["docker"] else []);
 
       home = "/home/martin";
       createHome = true;
