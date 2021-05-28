@@ -30,12 +30,12 @@
       xresources.properties = import ./martin/xresources.nix;
 
       programs = {
+        nix-index.enable = true;
+
         vscode = {
           enable = true;
           package = pkgs.vscodium;
         };
-
-        command-not-found.enable = true;
 
         i3status-rust = import ./martin/i3status-rust.nix { };
 
