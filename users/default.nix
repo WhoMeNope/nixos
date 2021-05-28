@@ -34,7 +34,10 @@
       xresources.properties = import ./martin/xresources.nix;
 
       programs = {
-        emacs = import ./martin/emacs.nix { inherit pkgs; };
+        vscode = {
+          enable = true;
+          package = pkgs.vscodium;
+        };
 
         command-not-found.enable = true;
 
