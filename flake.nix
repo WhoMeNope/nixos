@@ -54,7 +54,8 @@
 
         ({
           # Set your time zone.
-          time.timeZone = "Europe/Amsterdam";
+          time.timeZone = "America/Los_Angeles";
+          # time.timeZone = "Europe/Amsterdam";
 
           # This value determines the NixOS release with which your system is to be
           # compatible, in order to avoid breaking some software such as database
