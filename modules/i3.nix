@@ -11,8 +11,10 @@
     # Enable touchpad support.
     libinput = {
       enable = true;
-      naturalScrolling = true;
-      disableWhileTyping = true;
+      touchpad = {
+        naturalScrolling = true;
+        disableWhileTyping = true;
+      };
     };
     synaptics.enable = false;
 
@@ -21,7 +23,7 @@
       enable = true;
       extraPackages = with pkgs; [
         rofi
-        tinybeachthor.i3status-rust
+        i3status-rust
         i3lock-color
 
         xss-lock        # x sesssion locker
