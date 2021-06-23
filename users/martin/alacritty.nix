@@ -83,7 +83,6 @@ let
       double_click = { threshold = 300; };
       triple_click = { threshold = 300; };
       hide_when_typing = true;
-      url = { modifiers = "None"; };
     };
     selection = {
       semantic_escape_chars = '';│`|:"' ()[]{}<>'';
@@ -107,7 +106,6 @@ let
     key_bindings = [
       { key = "Key0"; mods = "Control"; action = "ResetFontSize"; }
       { key = "Equals"; mods = "Control"; action = "IncreaseFontSize"; }
-      { key = "Add"; mods = "Control"; action = "IncreaseFontSize"; }
 
       { key = "X"; mods = "Control"; chars = "\\x05\\x1b\\x7ffg\\x0d"; mode = "~Alt"; }
 
@@ -131,7 +129,6 @@ let
     rm $out/bin/alacritty
     # Because we create this ourself, by creating a wrapper
     makeWrapper ${pkgs.alacritty}/bin/alacritty $out/bin/alacritty \
-      --add-flags "--no-live-config-reload" \
       --set "WINIT_HIDPI_FACTOR" "1" \
       --set "WINIT_X11_SCALE_FACTOR" "1"
   '';
