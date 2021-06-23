@@ -27,19 +27,6 @@ tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
 
 " }}}
 
-" Netrw ---------------------- {{{
-
-let g:netrw_preview   = 1
-let g:netrw_liststyle = 2
-let g:netrw_winsize   = 20
-let g:netrw_banner    = 0
-let g:netrw_altv      = 1
-let g:netrw_list_hide = netrw_gitignore#Hide() . '.*\.swp$,.*\.un\~$,.git/$'
-
-" }}}
-
-nnoremap <leader><S-a> :<C-u>Back<space>
-
 " Vim basic settings ---------------------- {{{
 
 set encoding=utf-8
@@ -55,7 +42,7 @@ set tabstop=2 shiftwidth=2
 set softtabstop=-1 shiftround expandtab
 set cursorline
 set cc=80
-" window behaviour
+" window behavior
 set splitright splitbelow
 set switchbuf="vsplit"
 " show matching paren on closing for n 10ths of second
@@ -74,39 +61,6 @@ filetype plugin indent on
 " fuzzy
 set path+=**
 set wildmenu
-
-" }}}
-
-" Look & Feel ---------------------- {{{
-
-" terminal color normalization fixes
-if &term =~ '256color'
-  " disable Background Color Erase (BCE) so that color schemes
-  " render properly when inside 256-color tmux and GNU screen.
-  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
-  set t_ut=
-endif
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-set termguicolors
-
-" Sign bar (git + marks)
-let g:gitgutter_override_sign_column_highlight = 0
-let g:SignatureMarkerTextHLDynamic = 1
-
-" colorscheme
-set background=dark
-let g:neosolarized_contrast = "high"
-let g:neosolarized_visibility = "low"
-let g:neosolarized_underline = 0
-colorscheme NeoSolarized
-
-" Airline
-set noshowmode " Hide mode indicator - included in airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-let g:airline#parts#ffenc#skip_expected_string = 'utf-8[unix]'
-let g:airline_section_z = '%3p%% %3l/%L:%3v'
 
 " }}}
 
@@ -205,6 +159,8 @@ command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | 
 
 " Filetype specific---------------------- {{{
 
+" svelte
+au! BufNewFile,BufRead *.svelte set ft=html
 " vim
 augroup filetype_vim
     autocmd!
@@ -216,50 +172,66 @@ augroup filetype_gitcommit
     autocmd!
     autocmd FileType gitcommit setlocal tw=72 spell wrap
 augroup END
-" vimwiki
-augroup filetype_vimwiki
-    autocmd!
-    autocmd FileType vimwiki setlocal tw=72 spell wrap cc=120
-augroup END
 " markdown
 augroup filetype_markdown
     autocmd!
     autocmd FileType markdown setlocal tw=72 spell wrap cc=120
+    autocmd FileType markdown setlocal wrap wrapscan linebreak nolist spell
+
+    autocmd FileType markdown nnoremap <buffer> j gj
+    autocmd FileType markdown nnoremap <buffer> k gk
+    autocmd FileType markdown nnoremap <buffer> 0 g0
+    autocmd FileType markdown nnoremap <buffer> ^ g^
+    autocmd FileType markdown nnoremap <buffer> $ g$
+
+    autocmd FileType markdown vnoremap <buffer> j gj
+    autocmd FileType markdown vnoremap <buffer> k gk
+    autocmd FileType markdown vnoremap <buffer> 0 g0
+    autocmd FileType markdown vnoremap <buffer> ^ g^
+    autocmd FileType markdown vnoremap <buffer> $ g$
 augroup END
+" latex
+augroup filetype_latex
+  autocmd!
+  autocmd FileType tex setlocal wrap wrapscan linebreak nolist spell
+
+  autocmd FileType tex nnoremap <buffer> j gj
+  autocmd FileType tex nnoremap <buffer> k gk
+  autocmd FileType tex nnoremap <buffer> 0 g0
+  autocmd FileType tex nnoremap <buffer> ^ g^
+  autocmd FileType tex nnoremap <buffer> $ g$
+
+  autocmd FileType tex vnoremap <buffer> j gj
+  autocmd FileType tex vnoremap <buffer> k gk
+  autocmd FileType tex vnoremap <buffer> 0 g0
+  autocmd FileType tex vnoremap <buffer> ^ g^
+  autocmd FileType tex vnoremap <buffer> $ g$
+augroup END
+let g:tex_flavor = "latex"
+" racket
+augroup filetype_racket
+  autocmd!
+  autocmd FileType racket let b:coc_pairs_disabled = ["'", "<"]
+  autocmd FileType racket nmap <buffer> <CR> ysabba
+augroup END
+" lisp
+augroup filetype_lisp
+    autocmd!
+    autocmd FileType lisp let b:coc_pairs_disabled = ["'", "<"]
+    autocmd FileType lisp nmap <buffer> <CR> ysabba
+augroup END
+" c
+augroup filetype_c
+    autocmd!
+    autocmd FileType c nnoremap <silent> <localleader>o :<C-u>CocCommand clangd.switchSourceHeader<CR>
+    autocmd FileType cpp nnoremap <silent> <localleader>o :<C-u>CocCommand clangd.switchSourceHeader<CR>
+ augroup END
 " SQL
 let g:omni_sql_no_default_maps = 1
-" Assembly
-augroup filetype_asm
-    autocmd!
-    autocmd FileType asm setlocal tabstop=4 shiftwidth=4 noexpandtab
-    autocmd FileType asm setlocal commentstring=#\ %s
-augroup END
-" Clojure
-augroup filetype_clojure
-    autocmd!
-    autocmd VimEnter *.clj RainbowParenthesesToggle
-    autocmd Syntax clojure RainbowParenthesesLoadRound
-    autocmd Syntax clojure RainbowParenthesesLoadSquare
-    autocmd Syntax clojure RainbowParenthesesLoadBraces
-augroup END
-" Java
-augroup filetype_java
-    autocmd!
-    autocmd FileType java setlocal tabstop=4 shiftwidth=4 cc=120
-augroup END
-
 " }}}
 
 " disable moving parentheses - detects '<' as a start of sequence in insert mode
 let g:AutoPairsMoveCharacter=""
-
-" don't open lines with comments
-" don't insert comment leader in insert mode
-" remove comment leader on join
-augroup global
-    autocmd!
-    autocmd FileType * set formatoptions=jcql
-augroup END
 
 " CoC ---------------------- {{{
 
@@ -271,6 +243,11 @@ set hidden
 set cmdheight=2
 set updatetime=250
 set signcolumn=yes
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
 
 " use <tab> for trigger completion and navigate next complete item
 function! s:check_back_space() abort
@@ -366,8 +343,7 @@ nnoremap <silent> <leader>cr  :<C-u>CocList mru<CR>
 
 " FZF ---------------------- {{{
 
-nnoremap <leader><leader> :FZF<CR>
-
+nnoremap <leader><leader> :GFiles<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#run({'sink': 'e'}) | endif
 
@@ -383,78 +359,19 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
 
 " }}}
 
-" Buffers ---------------------- {{{
-
-nmap <silent> <leader>1 <Plug>AirlineSelectTab1
-nmap <silent> <leader>2 <Plug>AirlineSelectTab2
-nmap <silent> <leader>3 <Plug>AirlineSelectTab3
-nmap <silent> <leader>4 <Plug>AirlineSelectTab4
-nmap <silent> <leader>5 <Plug>AirlineSelectTab5
-nmap <silent> <leader>6 <Plug>AirlineSelectTab6
-nmap <silent> <leader>7 <Plug>AirlineSelectTab7
-nmap <silent> <leader>8 <Plug>AirlineSelectTab8
-nmap <silent> <leader>9 <Plug>AirlineSelectTab9
-nmap <silent> <leader>0 <Plug>AirlineSelectTab10
-
-" switch to last buffer
-nnoremap <silent> <Leader>- :b#<CR>
-
-nmap <silent> <leader>v1 <C-w><C-v><Plug>AirlineSelectTab1
-nmap <silent> <leader>v2 <C-w><C-v><Plug>AirlineSelectTab2
-nmap <silent> <leader>v3 <C-w><C-v><Plug>AirlineSelectTab3
-nmap <silent> <leader>v4 <C-w><C-v><Plug>AirlineSelectTab4
-nmap <silent> <leader>v5 <C-w><C-v><Plug>AirlineSelectTab5
-nmap <silent> <leader>v6 <C-w><C-v><Plug>AirlineSelectTab6
-nmap <silent> <leader>v7 <C-w><C-v><Plug>AirlineSelectTab7
-nmap <silent> <leader>v8 <C-w><C-v><Plug>AirlineSelectTab8
-nmap <silent> <leader>v9 <C-w><C-v><Plug>AirlineSelectTab9
-nmap <silent> <leader>v0 <C-w><C-v><Plug>AirlineSelectTab10
-
-nmap <silent> <leader>s1 <C-w><C-s><Plug>AirlineSelectTab1
-nmap <silent> <leader>s2 <C-w><C-s><Plug>AirlineSelectTab2
-nmap <silent> <leader>s3 <C-w><C-s><Plug>AirlineSelectTab3
-nmap <silent> <leader>s4 <C-w><C-s><Plug>AirlineSelectTab4
-nmap <silent> <leader>s5 <C-w><C-s><Plug>AirlineSelectTab5
-nmap <silent> <leader>s6 <C-w><C-s><Plug>AirlineSelectTab6
-nmap <silent> <leader>s7 <C-w><C-s><Plug>AirlineSelectTab7
-nmap <silent> <leader>s8 <C-w><C-s><Plug>AirlineSelectTab8
-nmap <silent> <leader>s9 <C-w><C-s><Plug>AirlineSelectTab9
-nmap <silent> <leader>s0 <C-w><C-s><Plug>AirlineSelectTab10
-
-" split with last buffer
-nnoremap <silent> <Leader>v- :vsplit<CR>:b#<CR>
-nnoremap <silent> <Leader>s- :split<CR>:b#<CR>
-
-" }}}
-
-let g:local_config_dir = $HOME . "/.config/nvim/"
-
-nnoremap <silent> <leader>ev :<C-U>e ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <leader>ec :<C-U>e ~/.config/nvim/coc-settings.json<CR>
+let g:local_config = $HOME . "/.config/nvim/local.vim"
 
 " source local config, if exists
 " leave at the end so defaults can be overridden
-if filereadable(local_config_dir . "init.vim")
-    execute "source " . g:local_config_dir . "init.vim"
+if filereadable(local_config)
+    execute "source " . g:local_config
 endif
 
+nnoremap <silent> <leader>ev :<C-U>e ~/.config/nvim/local.vim<CR>
+nnoremap <silent> <leader>ec :<C-U>e ~/.config/nvim/coc-settings.json<CR>
+
 " re-source configuration
-nnoremap <leader>sv :<C-U>source ~/.config/nvim/init.vim<CR>:nohlsearch<CR>
+nnoremap <leader>sv :<C-U>source ~/.config/nvim/local.vim<CR>:nohlsearch<CR>
