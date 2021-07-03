@@ -25,6 +25,7 @@
       system = "x86_64-linux";
       modules = [
         ({
+          networking.hostName = "ALBATROSS";
           nixpkgs = {
             overlays = [
               tinybeachthor.overlay
@@ -33,11 +34,6 @@
             config = { allowUnfree = true; allowBroken = false; };
           };
           nix.registry.nixpkgs.flake = nixpkgs;
-
-          # https://github.com/NixOS/nix/issues/3821
-          systemd.services.nix-daemon.serviceConfig.LimitSTACKSoft = "infinity";
-
-          networking.hostName = "ALBATROSS";
         })
         ./hardware-configuration.nix
         ./cachix.nix
