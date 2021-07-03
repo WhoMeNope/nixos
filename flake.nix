@@ -35,13 +35,10 @@
           };
           nix.registry.nixpkgs.flake = nixpkgs;
         })
-        ./hardware-configuration.nix
+        ./hardware/lenovo-l380-yoga.nix
         ./cachix.nix
 
         ./profiles/desktop.nix
-
-        ./extras/intel.nix
-        ./extras/thinkpad.nix
         ./extras/wacom.nix
 
         home-manager.nixosModules.home-manager

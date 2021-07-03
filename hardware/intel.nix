@@ -10,10 +10,11 @@
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
-  };
 
-  hardware.opengl.extraPackages = with pkgs; [
-    vaapiIntel
-  ];
+    cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
+
+    opengl.extraPackages = with pkgs; [
+      vaapiIntel
+    ];
+  };
 }
