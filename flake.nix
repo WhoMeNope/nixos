@@ -21,42 +21,50 @@
   };
   outputs = { self, flake-utils, nixpkgs, home-manager, tinybeachthor, remarkable }:
   {
-    nixosConfigurations.ALBATROSS = nixpkgs.lib.nixosSystem rec {
-      system = "x86_64-linux";
-      modules = [
-        ({
-          networking.hostName = "ALBATROSS";
-          nixpkgs = {
-            overlays = [
-              tinybeachthor.overlay
-              remarkable.overlay.${system}
-            ];
-            config = { allowUnfree = true; allowBroken = false; };
-          };
-          nix.registry.nixpkgs.flake = nixpkgs;
-        })
-        ./hardware/lenovo-l380-yoga.nix
-        ./cachix.nix
+    nixosConfigurations =
+      let
+        common = {
+          modules = [
+            ({
+              nixpkgs.config = {
+                allowUnfree = true;
+                allowBroken = false;
+              };
 
-        ./profiles/desktop.nix
-        ./extras/wacom.nix
+              nix.registry.nixpkgs.flake = nixpkgs;
+            })
+          ];
+        };
+      in {
+        ALBATROSS = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          modules = common.modules ++ [
+            ./hardware/lenovo-l380-yoga.nix
+            ./cachix.nix
+            ./profiles/desktop.nix
+            ./extras/wacom.nix
+            home-manager.nixosModules.home-manager
+            ./users
+            ./environment.nix
+            ({
+              nixpkgs.overlays = [
+                tinybeachthor.overlay
+                remarkable.overlay.${system}
+              ];
 
-        home-manager.nixosModules.home-manager
-        ./users
-        ./environment.nix
+              networking.hostName = "ALBATROSS";
 
-        ({
-          # Set your time zone.
-          time.timeZone = "America/Los_Angeles";
-          # time.timeZone = "Europe/Amsterdam";
+              # time.timeZone = "Europe/Amsterdam";
+              time.timeZone = "America/Los_Angeles";
 
-          # This value determines the NixOS release with which your system is to be
-          # compatible, in order to avoid breaking some software such as database
-          # servers. You should change this only after NixOS release notes say you
-          # should.
-          system.stateVersion = "19.09"; # Did you read the comment?
-        })
-      ];
-    };
+              # This value determines the NixOS release with which your system is to be
+              # compatible, in order to avoid breaking some software such as database
+              # servers. You should change this only after NixOS release notes say you
+              # should.
+              system.stateVersion = "19.09"; # Did you read the comment?
+            })
+          ];
+        };
+      };
   };
 }
