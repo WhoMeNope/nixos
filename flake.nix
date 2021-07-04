@@ -65,6 +65,36 @@
             })
           ];
         };
+        GUILTYSPARK = nixpkgs.lib.nixosSystem rec {
+          system = "aarch64-linux";
+          modules = common.modules ++ [
+            ({ modulesPath, ... }: {
+              imports = [
+                (modulesPath + "/installer/sd-card/sd-image-aarch64-new-kernel.nix")
+              ];
+            })
+            ({
+              powerManagement.cpuFreqGovernor = "ondemand";
+
+              users.users.chief = {
+                isNormalUser = true;
+                home = "/home/chief";
+                createHome = true;
+                extraGroups = [
+                  "wheel"
+                ];
+                openssh.authorizedKeys.keys = [
+                ];
+              };
+              security.sudo.wheelNeedsPassword = false;
+              services.openssh.enable = true;
+
+              networking.hostName = "GUILTYSPARK";
+              time.timeZone = "America/Los_Angeles";
+              system.stateVersion = "21.05";
+            })
+          ];
+        };
       };
   };
 }
