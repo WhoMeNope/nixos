@@ -41,11 +41,15 @@
           modules = common.modules ++ [
             ./hardware/lenovo-l380-yoga.nix
             ./cachix.nix
+
             ./profiles/desktop.nix
             ./extras/wacom.nix
+            ./extras/crosscompile-aarch64-linux.nix
+
             home-manager.nixosModules.home-manager
             ./users
             ./environment.nix
+
             ({
               nixpkgs.overlays = [
                 tinybeachthor.overlay
