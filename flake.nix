@@ -90,6 +90,7 @@
                   "wheel"
                 ];
                 openssh.authorizedKeys.keys = [
+                  (builtins.readFile (./. + "/secret/chief@GUILTYSPARK.pub"))
                 ];
               };
               security.sudo.wheelNeedsPassword = false;
