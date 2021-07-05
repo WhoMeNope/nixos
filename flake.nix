@@ -74,10 +74,12 @@
         GUILTYSPARK = nixpkgs.lib.nixosSystem rec {
           system = "aarch64-linux";
           modules = common.modules ++ [
-            ({ modulesPath, ... }: {
+            ({ config, modulesPath, ... }: {
               imports = [
                 (modulesPath + "/installer/sd-card/sd-image-aarch64-new-kernel.nix")
               ];
+
+              sdImage.compressImage = false;
             })
             ({
               powerManagement.cpuFreqGovernor = "ondemand";
