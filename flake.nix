@@ -43,8 +43,8 @@
             ./cachix.nix
 
             ./profiles/desktop.nix
-            ./extras/wacom.nix
-            ./extras/crosscompile-aarch64-linux.nix
+            ./modules/wacom.nix
+            ./modules/crosscompile-aarch64-linux.nix
 
             home-manager.nixosModules.home-manager
             ./users
