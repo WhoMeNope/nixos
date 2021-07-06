@@ -20,7 +20,7 @@
     };
   };
   outputs = { self, flake-utils, nixpkgs, home-manager, tinybeachthor, remarkable }:
-  {
+  rec {
     nixosConfigurations =
       let
         common = {
@@ -105,5 +105,8 @@
           ];
         };
       };
+    sdImages = {
+      GUILTYSPARK = nixosConfigurations.GUILTYSPARK.config.system.build.sdImage;
+    };
   };
 }
