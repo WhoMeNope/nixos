@@ -76,6 +76,8 @@
           modules = common.modules ++ [
             ({ config, modulesPath, ... }: {
               imports = [
+                # ./modules/sd-image-aarch64.nix
+                # (modulesPath + "/profiles/headless.nix")
                 (modulesPath + "/installer/sd-card/sd-image-aarch64-new-kernel.nix")
               ];
 
