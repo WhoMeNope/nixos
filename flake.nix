@@ -2,6 +2,7 @@
   inputs = {
     flake-utils.url = github:numtide/flake-utils/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
+    nixos-hardware.url = github:NixOS/nixos-hardware/master;
     home-manager = {
       url = github:rycee/home-manager/release-21.05;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,8 +20,12 @@
       };
     };
   };
-  outputs = { self, flake-utils, nixpkgs, home-manager, tinybeachthor, remarkable }:
-  rec {
+  outputs = {
+    self,
+    flake-utils,
+    nixpkgs, nixos-hardware, home-manager,
+    tinybeachthor, remarkable
+  }: rec {
     nixosConfigurations =
       let
         common = {
@@ -73,8 +78,9 @@
         };
         GUILTYSPARK = nixpkgs.lib.nixosSystem rec {
           system = "aarch64-linux";
-          modules = common.modules ++ [
-            ({ config, modulesPath, ... }: {
+          modules = [
+            # nixos-hardware.nixosModules.raspberry-pi-4
+            ({ config, lib, pkgs, modulesPath, ... }: {
               imports = [
                 # ./modules/sd-image-aarch64.nix
                 # (modulesPath + "/profiles/headless.nix")
