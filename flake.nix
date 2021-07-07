@@ -2,6 +2,7 @@
   inputs = {
     flake-utils.url = github:numtide/flake-utils/master;
     nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
+    nixpkgs-unstable.url = github:NixOS/nixpkgs/nixos-unstable;
     nixos-hardware.url = github:NixOS/nixos-hardware/master;
     home-manager = {
       url = github:rycee/home-manager/release-21.05;
@@ -23,7 +24,7 @@
   outputs = {
     self,
     flake-utils,
-    nixpkgs, nixos-hardware, home-manager,
+    nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager,
     tinybeachthor, remarkable
   }: rec {
     nixosConfigurations =
@@ -76,7 +77,7 @@
             })
           ];
         };
-        GUILTYSPARK = nixpkgs.lib.nixosSystem rec {
+        GUILTYSPARK = nixpkgs-unstable.lib.nixosSystem rec {
           system = "aarch64-linux";
           modules = [
             # nixos-hardware.nixosModules.raspberry-pi-4
