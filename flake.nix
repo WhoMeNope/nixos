@@ -88,28 +88,62 @@
                 (modulesPath + "/installer/sd-card/sd-image-aarch64-new-kernel.nix")
               ];
 
-              sdImage.compressImage = false;
-            })
-            ({
-              powerManagement.cpuFreqGovernor = "ondemand";
+              # boot.loader.raspberryPi.enable = true;
+              # boot.loader.raspberryPi.version = 4;
 
-              users.users.chief = {
-                isNormalUser = true;
-                home = "/home/chief";
-                createHome = true;
-                extraGroups = [
-                  "wheel"
-                ];
-                openssh.authorizedKeys.keys = [
-                  (builtins.readFile (./. + "/secret/chief@GUILTYSPARK.pub"))
-                ];
+              sdImage = {
+              #   # This might need to be increased when deploying multiple configurations.
+              #   firmwareSize = 128;
+              #   # TODO: check if needed.
+              #   populateFirmwareCommands =
+              #     "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
+              #   # /var/empty is needed for some services, such as sshd
+              #   # XXX: This might not be needed anymore, adding to be extra sure.
+              #   populateRootCommands = "mkdir -p ./files/var/empty";
+
+                compressImage = false;
+                imageBaseName = lib.mkDefault config.networking.hostName;
               };
-              security.sudo.wheelNeedsPassword = false;
-              services.openssh.enable = true;
+
+              # # There is no U-Boot on the Pi 4
+              # # thus the firmware partition needs to be mounted as /boot.
+              # fileSystems = lib.mkForce {
+              #   "/boot" = {
+              #     device = "/dev/disk/by-label/FIRMWARE";
+              #     fsType = "vfat";
+              #   };
+              #   "/" = {
+              #     device = "/dev/disk/by-label/NIXOS_SD";
+              #     fsType = "ext4";
+              #   };
+              # };
+            })
+            ({ lib, ... }: {
+            #   powerManagement.cpuFreqGovernor = "ondemand";
+
+            #   users.users.chief = {
+            #     isNormalUser = true;
+            #     home = "/home/chief";
+            #     createHome = true;
+            #     extraGroups = [
+            #       "wheel"
+            #     ];
+            #     openssh.authorizedKeys.keys = [
+            #       (builtins.readFile (./. + "/secret/chief@GUILTYSPARK.pub"))
+            #     ];
+            #   };
+            #   security.sudo.wheelNeedsPassword = false;
+
+            #   # OpenSSH is forced to have an empty `wantedBy` on the installer system[1], this won't allow it
+            #   # to be automatically started. Override it with the normal value.
+            #   # [1] https://github.com/NixOS/nixpkgs/blob/9e5aa25/nixos/modules/profiles/installation-device.nix#L76
+            #   systemd.services.sshd.wantedBy = lib.mkOverride 40 [ "multi-user.target" ];
+            #   # Enable OpenSSH out of the box.
+            #   services.sshd.enable = true;
 
               networking.hostName = "GUILTYSPARK";
-              time.timeZone = "America/Los_Angeles";
-              system.stateVersion = "21.05";
+            #   time.timeZone = "America/Los_Angeles";
+            #   system.stateVersion = "21.05";
             })
           ];
         };
