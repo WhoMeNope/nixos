@@ -3,6 +3,9 @@
 {
   nix.trustedUsers = [ "root" "martin" ];
 
+  security.sudo.wheelNeedsPassword = false;
+  security.sudo.execWheelOnly = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
     martin = {
