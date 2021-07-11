@@ -4,8 +4,8 @@
 
 {
   imports = [
-    (modulesPath + "/profiles/base.nix")
     (modulesPath + "/installer/sd-card/sd-image.nix")
+    (modulesPath + "/profiles/minimal.nix")
   ];
 
   boot.loader.grub.enable = false;
