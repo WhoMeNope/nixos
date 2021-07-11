@@ -51,6 +51,8 @@
             ./environment.nix
 
             ({
+              hardware.spacenavd.enable = true;
+
               nixpkgs.overlays = [
                 tinybeachthor.overlay
                 remarkable.overlay.${system}
