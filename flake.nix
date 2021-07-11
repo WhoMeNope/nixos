@@ -85,46 +85,43 @@
               imports = [
                 ./modules/sd-image-aarch64.nix
                 # (modulesPath + "/profiles/headless.nix")
-                # (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
               ];
 
               boot.kernelPackages = pkgs.linuxPackages_latest;
 
-              # boot.loader.raspberryPi.enable = true;
-              # boot.loader.raspberryPi.version = 4;
-
               sdImage = {
                 compressImage = false;
-                # imageBaseName = lib.mkDefault config.networking.hostName;
+                imageBaseName = lib.mkDefault config.networking.hostName;
               };
             })
-            # ({ lib, ... }: {
-            #   powerManagement.cpuFreqGovernor = "ondemand";
+            ({ lib, ... }: {
+              hardware.bluetooth = {
+                enable = false;
+                powerOnBoot = false;
+              };
 
-            #   users.users.chief = {
-            #     isNormalUser = true;
-            #     home = "/home/chief";
-            #     createHome = true;
-            #     extraGroups = [
-            #       "wheel"
-            #     ];
-            #     openssh.authorizedKeys.keys = [
-            #       (builtins.readFile (./. + "/secret/chief@GUILTYSPARK.pub"))
-            #     ];
-            #   };
-            #   security.sudo.wheelNeedsPassword = false;
+              powerManagement.cpuFreqGovernor = "ondemand";
 
-            #   # OpenSSH is forced to have an empty `wantedBy` on the installer system[1], this won't allow it
-            #   # to be automatically started. Override it with the normal value.
-            #   # [1] https://github.com/NixOS/nixpkgs/blob/9e5aa25/nixos/modules/profiles/installation-device.nix#L76
-            #   systemd.services.sshd.wantedBy = lib.mkOverride 40 [ "multi-user.target" ];
-            #   # Enable OpenSSH out of the box.
-            #   services.sshd.enable = true;
+              users.mutableUsers = false;
+              users.users.chief = {
+                isNormalUser = true;
+                home = "/home/chief";
+                createHome = true;
+                extraGroups = [
+                  "wheel"
+                ];
+                openssh.authorizedKeys.keys = [
+                  (builtins.readFile (./. + "/secret/chief@GUILTYSPARK.pub"))
+                ];
+              };
+              security.sudo.wheelNeedsPassword = false;
 
-              # networking.hostName = "GUILTYSPARK";
-            #   time.timeZone = "America/Los_Angeles";
-            #   system.stateVersion = "21.05";
-            # })
+              services.openssh.enable = true;
+
+              networking.hostName = "GUILTYSPARK";
+              time.timeZone = "America/Los_Angeles";
+              system.stateVersion = "21.05";
+            })
           ];
         };
       };
