@@ -83,42 +83,22 @@
             # nixos-hardware.nixosModules.raspberry-pi-4
             ({ config, lib, pkgs, modulesPath, ... }: {
               imports = [
-                # ./modules/sd-image-aarch64.nix
+                ./modules/sd-image-aarch64.nix
                 # (modulesPath + "/profiles/headless.nix")
-                (modulesPath + "/installer/sd-card/sd-image-aarch64-new-kernel.nix")
+                # (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
               ];
+
+              boot.kernelPackages = pkgs.linuxPackages_latest;
 
               # boot.loader.raspberryPi.enable = true;
               # boot.loader.raspberryPi.version = 4;
 
               sdImage = {
-              #   # This might need to be increased when deploying multiple configurations.
-              #   firmwareSize = 128;
-              #   # TODO: check if needed.
-              #   populateFirmwareCommands =
-              #     "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-              #   # /var/empty is needed for some services, such as sshd
-              #   # XXX: This might not be needed anymore, adding to be extra sure.
-              #   populateRootCommands = "mkdir -p ./files/var/empty";
-
                 compressImage = false;
-                imageBaseName = lib.mkDefault config.networking.hostName;
+                # imageBaseName = lib.mkDefault config.networking.hostName;
               };
-
-              # # There is no U-Boot on the Pi 4
-              # # thus the firmware partition needs to be mounted as /boot.
-              # fileSystems = lib.mkForce {
-              #   "/boot" = {
-              #     device = "/dev/disk/by-label/FIRMWARE";
-              #     fsType = "vfat";
-              #   };
-              #   "/" = {
-              #     device = "/dev/disk/by-label/NIXOS_SD";
-              #     fsType = "ext4";
-              #   };
-              # };
             })
-            ({ lib, ... }: {
+            # ({ lib, ... }: {
             #   powerManagement.cpuFreqGovernor = "ondemand";
 
             #   users.users.chief = {
@@ -141,10 +121,10 @@
             #   # Enable OpenSSH out of the box.
             #   services.sshd.enable = true;
 
-              networking.hostName = "GUILTYSPARK";
+              # networking.hostName = "GUILTYSPARK";
             #   time.timeZone = "America/Los_Angeles";
             #   system.stateVersion = "21.05";
-            })
+            # })
           ];
         };
       };
