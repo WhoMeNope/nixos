@@ -81,20 +81,12 @@
           system = "aarch64-linux";
           modules = [
             # nixos-hardware.nixosModules.raspberry-pi-4
-            ({ config, lib, pkgs, modulesPath, ... }: {
+            ({ lib, modulesPath, ... }: {
               imports = [
                 ./modules/sd-image-aarch64.nix
                 # (modulesPath + "/profiles/headless.nix")
               ];
 
-              boot.kernelPackages = pkgs.linuxPackages_latest;
-
-              sdImage = {
-                compressImage = false;
-                imageBaseName = lib.mkDefault config.networking.hostName;
-              };
-            })
-            ({ lib, ... }: {
               hardware.bluetooth = {
                 enable = false;
                 powerOnBoot = false;
